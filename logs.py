@@ -81,7 +81,7 @@ def high_percent_error():
         date = results[i][0]
         percentages = results[i][1]
         print("""
-        {} - {}%
+        {} - {}% errors
         """.format(date, percentages))
     print("\n")
 
