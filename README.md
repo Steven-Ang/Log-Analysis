@@ -39,11 +39,11 @@ The following SQL views are required to run the program. Run `psql news` inside 
 This query calculates the number of time an article occur in the table.
 ```SQL
 CREATE view articles_view as
-SELECT articles.title, articles.author, count(*) AS views
-FROM articles,log
+SELECT title, author, count(*) AS views
+FROM articles, log
 WHERE log.path like concat('/article/', articles.slug)
-GROUP BY articles.title, articles.author
-ORDER BY (count(*)) DESC;
+GROUP BY title, author
+ORDER BY views DESC;
 ```
 ## authors_view
 This query calculates the total number of views each authors have.
