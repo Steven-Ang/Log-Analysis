@@ -1,23 +1,46 @@
 # Log Analysis
 
-# Prerequisites
+# Prerequisites:
 ### You will need to have following technologies to run this program:
 * [Python 3](https://www.python.org/downloads/)
 * [Virtual Box](https://www.virtualbox.org/wiki/Downloads)
 * [Vagrant](https://www.vagrantup.com/downloads.html)
 
-# SQL Views
-##### articles_view
-* This query calculate the number of time an article occur in the table.
-```
+# Installation Guide:
+### Guide on Python:
+1. Visit this [link](https://www.python.org/downloads/), find the latest version of Python 3 and download it.
+2. Once it's finished, click on it.
+3. Follow the instructions provided by the wizard.
+4. To check if Python is successfully installed into your computer, open up your terimal and type the following `python --version`. If it's successful, it will displays the version of the Python you're using.
+
+### Guide on VM (Virtual Box):
+1. Visit this [link](https://www.virtualbox.org/wiki/Downloads), find the host that is compatible with your operating system and download it.
+2. Once it's finished, click on it.
+3. Follow the instructions provided by the wizard.
+4. Opening the software is not required, vagrant will do the work for it.
+
+### Guide on Vagrant:
+1. Visit this [link]((https://www.vagrantup.com/downloads.html), find the package that is proper for your operating system and download it.
+2. Once it's finished, click on it.
+3. Follow the instructions provided by the wizard.
+4. To check if it's successfully installed into your computer, open your terimal and type the following `vagrant --version`.
+5. The rest of it will be cover in the **How To Run The Program** section.
+
+# SQL Views:
+The following SQL views are required to run the program. Run `psql news` inside the /vagrant directory and either copy paste them individually or type them manually.
+
+## articles_view
+This query calculates the number of time an article occur in the table.
+```SQL
 CREATE view articles_view as
 select title, count(*) as views
 FROM articles, log
 WHERE log.path = concat('/article/', articles.slug)
 GROUP BY title ORDER BY views DESC;
 ```
-##### authors_view
-```
+## authors_view
+This query calculates the total number of views each authors have.
+```SQL
 CREATE view authors_view as
 SELECT name, sum(articles_view.views) as total
 FROM articles_view, authors
@@ -25,33 +48,41 @@ WHERE authors.id = articles_view.author
 GROUP BY authors.name
 ORDER BY total DESC;
 ```
-##### failed_requests
-* This query calculates the number of failed requests each date.
-```
+## failed_requests
+This query calculates the number of failed requests each date in the database.
+```SQL
 CREATE view failed_requests as
 SELECT date(time) as date, count(status) as errors
 FROM log where status != '200 OK'
 GROUP BY date
 ORDER BY date;
 ```
-##### total_requests
-* This query calculates the total number of requests in the database.
-```
+## total_requests
+This query calculates the total number of requests in the database.
+```SQL
 CREATE view total_requests as
 SELECT date(time) as date, count(status) as requests
 FROM log
 GROUP BY date
 ORDER BY date;
 ```
-##### error_percentages
-```
+## error_percentages
+This query uses *failed_requests* and *total_requests* to calculates the error percentgaes of each date in the database.
+```SQL
 CREATE view error_percentages as
 SELECT total_requests.date,
-ROUND((100.0 * failed_requests.errors)/total_requests.requests, 2) as error_percentages
+ROUND((100.0 * failed_requests.errors)/total_requests.requests, 2) as error_percentages;
 ```
 
-# Get Started
-* If you haven't already, install [Virtual Box](https://www.virtualbox.org/wiki/Downloads) and [Vagrant](https://www.vagrantup.com/downloads.html)
-* Download this repo from the download section or simply clone it by using the following command:
-``` ```
-*
+# How To Run The Program:
+#### If the instructions aren't very clear, please tell me. I will improve it, criticisms are very much appreciated.
+* If you haven't already, download all of the required technologies needed for this program from the **Installation Guide**.
+* Download this repository or clone it by using the following command: `git clone https://github.com/Steven-Ang/Log-Analysis`
+* Visit this [repository](https://github.com/udacity/fullstack-nanodegree-vm), download the folder or clone it by using the following command: `git clone https://github.com/udacity/fullstack-nanodegree-vm`
+* Download this zip [file](https://d17h27t6h515a5.cloudfront.net/topher/2016/August/57b5f748_newsdata/newsdata.zip), unzip it when it's finished.
+* Move **newsdata.sql** and the folder, **logs** into **FSND-Virtual_Machine/vagrant**.
+* Inside the **vagrant** directory which located inside **FSND-Virtual_Machine**. Open your terminal and run this command `vagrant up`. When you ran it, it may takes a few minutes or an hour (depending on your internet connection) to finish.
+* Once it's done, run this command `vagrant ssh`. This command will start the vagrant virtual machine. Inside your terminal, do this `cd /vagrant`. This command will move your current path to vagrant's path.
+* Inside your terminal, do this command `psql news`. It will takes you inside the news database. And now copy paste all of the views from **SQL views** section.
+* Once it's done, do `CTRL + Z` or `CMD + Z` to exit.
+* Now inside your terminal, do this `cd logs\` then run `python logs.py`. This will start the program and displayed the analysis inside the terminal.
