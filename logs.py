@@ -41,7 +41,7 @@ def top_articles():
         title = results[i][0]
         views = results[i][1]
         print("""
-        "{}" - {} views
+        "{}" - {:,} views
         """.format(title, views))
     print("\n")
 
@@ -61,7 +61,7 @@ def popular_authors():
         author = results[i][0]
         total_views = results[i][1]
         print("""
-        {} - {} views
+        {} - {:,} views
         """.format(author, total_views))
     print("\n")
 
