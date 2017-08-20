@@ -1,4 +1,9 @@
 # Log Analysis
+Writing Python code to make a business analysis from a database with millions of rows. The analysis will answer these three questions:
+1. **What are the most popular three articles of all time?**
+2. **Who are the most popular article authors of all time?**
+3. **On which days did more than 1% of requests lead to errors?**
+The results will be displayed inside the terminal by running `python logs.py`.
 
 # Prerequisites:
 ### You will need to have following technologies to run this program:
