@@ -39,10 +39,11 @@ The following SQL views are required to run the program. Run `psql news` inside 
 This query calculates the number of time an article occur in the table.
 ```SQL
 CREATE view articles_view as
-select title, count(*) as views
-FROM articles, log
-WHERE log.path = concat('/article/', articles.slug)
-GROUP BY title ORDER BY views DESC;
+SELECT articles.title, articles.author, count(*) AS views
+FROM articles,log
+WHERE log.path ~~ concat('/article/', articles.slug)
+GROUP BY articles.title, articles.author
+ORDER BY (count(*)) DESC;
 ```
 ## authors_view
 This query calculates the total number of views each authors have.
@@ -77,7 +78,9 @@ This query uses *failed_requests* and *total_requests* to calculates the error p
 ```SQL
 CREATE view error_percentages as
 SELECT total_requests.date,
-ROUND((100.0 * failed_requests.errors)/total_requests.requests, 2) as error_percentages;
+ROUND((100.0 * failed_requests.errors)/total_requests.requests, 2) as error_percentages
+FROM failed_requests, total_requests
+WHERE failed_requests.date = total_requests.date;
 ```
 
 # How To Run The Program:
