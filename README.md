@@ -41,7 +41,7 @@ This query calculates the number of time an article occur in the table.
 CREATE view articles_view as
 SELECT articles.title, articles.author, count(*) AS views
 FROM articles,log
-WHERE log.path ~~ concat('/article/', articles.slug)
+WHERE log.path like concat('/article/', articles.slug)
 GROUP BY articles.title, articles.author
 ORDER BY (count(*)) DESC;
 ```
