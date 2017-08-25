@@ -17,7 +17,7 @@ The results will be displayed inside the terminal by running `python logs.py`.
 1. Visit this [link](https://www.python.org/downloads/), find the latest version of Python 3 and download it.
 2. Once it's finished, click on it.
 3. Follow the instructions provided by the wizard.
-4. To check if Python is successfully installed into your computer, open up your terimal and type the following `python --version`. If it's successful, it will displays the version of the Python you're using.
+4. To check if Python is successfully installed into your computer, open up your terminal and type the following `python --version`. If it's successful, it will displays the version of the Python you're using.
 
 ### Guide on VM (Virtual Box):
 1. Visit this [link](https://www.virtualbox.org/wiki/Downloads), find the host that is compatible with your operating system and download it.
@@ -26,10 +26,10 @@ The results will be displayed inside the terminal by running `python logs.py`.
 4. Opening the software is not required, vagrant will do the work for it.
 
 ### Guide on Vagrant:
-1. Visit this [link]((https://www.vagrantup.com/downloads.html), find the package that is proper for your operating system and download it.
+1. Visit this [link](https://www.vagrantup.com/downloads.html), find the package that is proper for your operating system and download it.
 2. Once it's finished, click on it.
 3. Follow the instructions provided by the wizard.
-4. To check if it's successfully installed into your computer, open your terimal and type the following `vagrant --version`.
+4. To check if it's successfully installed into your computer, open your terminal and type the following `vagrant --version`.
 5. The rest of it will be cover in the **How To Run The Program** section.
 
 # SQL Views:
@@ -38,7 +38,7 @@ The following SQL views are required to run the program. Run `psql news` inside 
 ## articles_view
 This query calculates the number of time an article occur in the table.
 ```SQL
-CREATE view articles_view as
+CREATE VIEW articles_view as
 SELECT title, author, count(*) AS views
 FROM articles, log
 WHERE log.path like concat('/article/', articles.slug)
@@ -48,7 +48,7 @@ ORDER BY views DESC;
 ## authors_view
 This query calculates the total number of views each authors have.
 ```SQL
-CREATE view authors_view as
+CREATE VIEW authors_view as
 SELECT name, sum(articles_view.views) as total
 FROM articles_view, authors
 WHERE authors.id = articles_view.author
@@ -58,7 +58,7 @@ ORDER BY total DESC;
 ## failed_requests
 This query calculates the number of failed requests each date in the database.
 ```SQL
-CREATE view failed_requests as
+CREATE VIEW failed_requests as
 SELECT date(time) as date, count(status) as errors
 FROM log where status != '200 OK'
 GROUP BY date
@@ -67,7 +67,7 @@ ORDER BY date;
 ## total_requests
 This query calculates the total number of requests in the database.
 ```SQL
-CREATE view total_requests as
+CREATE VIEW total_requests as
 SELECT date(time) as date, count(status) as requests
 FROM log
 GROUP BY date
@@ -76,7 +76,7 @@ ORDER BY date;
 ## error_percentages
 This query uses *failed_requests* and *total_requests* to calculates the error percentgaes of each date in the database.
 ```SQL
-CREATE view error_percentages as
+CREATE VIEW error_percentages as
 SELECT total_requests.date,
 ROUND((100.0 * failed_requests.errors)/total_requests.requests, 2) as error_percentages
 FROM failed_requests, total_requests
