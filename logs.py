@@ -28,19 +28,22 @@ def top_articles():
     This function is used to solve problem 1,
     and also print out the outputs in the end
     """
-    db, cursor = connect()
-    cursor.execute(top3_articles)
-    results = cursor.fetchall()
-    db.close()
-    print("\n")
-    print("The most popular three articles of all time are:".title())
-    for i in range(len(results)):
-        title = results[i][0]
-        views = results[i][1]
-        print("""
-        "{}" - {:,} views
-        """.format(title, views))
-    print("\n")
+    try:
+        db, cursor = connect()
+        cursor.execute(top3_articles)
+        results = cursor.fetchall()
+        db.close()
+        print("\n")
+        print("The most popular three articles of all time are:".title())
+        for i in range(len(results)):
+            title = results[i][0]
+            views = results[i][1]
+            print("""
+            "{}" - {:,} views
+            """.format(title, views))
+        print("\n")
+    except:
+        print("\nHaving problem fetching data about the top articles.\n")
 
 
 def popular_authors():
@@ -48,18 +51,21 @@ def popular_authors():
     This function is used to solve problem 2,
     and also print out the outputs in the end
     """
-    db, cursor = connect()
-    cursor.execute(top_authors)
-    results = cursor.fetchall()
-    db.close()
-    print("The most popular article authors of all time are:".title())
-    for i in range(len(results)):
-        author = results[i][0]
-        total_views = results[i][1]
-        print("""
-        {} - {:,} views
-        """.format(author, total_views))
-    print("\n")
+    try:
+        db, cursor = connect()
+        cursor.execute(top_authors)
+        results = cursor.fetchall()
+        db.close()
+        print("The most popular article authors of all time are:".title())
+        for i in range(len(results)):
+            author = results[i][0]
+            total_views = results[i][1]
+            print("""
+            {} - {:,} views
+            """.format(author, total_views))
+        print("\n")
+    except:
+        print("\nHaving problem fetching data about the popular authors.\n")
 
 
 def high_percent_error():
@@ -67,20 +73,23 @@ def high_percent_error():
     This function is used to solve problem 3,
     and also print out the outputs in the end
     """
-    db, cursor = connect()
-    cursor.execute(error_percent)
-    results = cursor.fetchall()
-    db.close()
-    print("The day with more than 1% of requests lead to errors are:".title())
-    for i in range(len(results)):
-        date = results[i][0]
-        percentages = results[i][1]
-        print("""
-        {} - {}% errors
-        """.format(date, percentages))
-    print("\n")
+    try:
+        db, cursor = connect()
+        cursor.execute(error_percent)
+        results = cursor.fetchall()
+        db.close()
+        print("The day with more than 1% of requests lead to errors are:".title())
+        for i in range(len(results)):
+            date = results[i][0]
+            percentages = results[i][1]
+            print("""
+            {} - {}% errors
+            """.format(date, percentages))
+    except:
+        print("\nHaving problem fetching data about the percentage of errors\n")
 
 # Prints out the analysis in the terminal
-top_articles()
-popular_authors()
-high_percent_error()
+if __name__ == "__main__":
+    top_articles()
+    popular_authors()
+    high_percent_error()
