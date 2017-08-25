@@ -1,19 +1,17 @@
 #! /usr/bin/env python
 
-# Required library used to connect to the database
+# Import the necessary module
 import psycopg2
 
 
-# Make the database name into a variable
-DBNAME = "news"
+def connect(database_name="news"):
+    try:
+        db = psycopg2.connect("dbname={}".format(database_name))
+        cursor = db.cursor()
+        return db, cursor
+    except:
+        print("Having problem connecting to the database.")
 
-
-def connect():
-    """
-    Function for connecting the database,
-    reduce typing and readability
-    """
-    return psycopg2.connect(database=DBNAME)
 
 # Results of the top three articles in the database
 top3_articles = "SELECT title, views FROM articles_view LIMIT 3;"
@@ -30,10 +28,9 @@ def top_articles():
     This function is used to solve problem 1,
     and also print out the outputs in the end
     """
-    db = connect()
-    c = db.cursor()
-    c.execute(top3_articles)
-    results = c.fetchall()
+    db, cursor = connect()
+    cursor.execute(top3_articles)
+    results = cursor.fetchall()
     db.close()
     print("\n")
     print("The most popular three articles of all time are:".title())
@@ -51,10 +48,9 @@ def popular_authors():
     This function is used to solve problem 2,
     and also print out the outputs in the end
     """
-    db = connect()
-    c = db.cursor()
-    c.execute(top_authors)
-    results = c.fetchall()
+    db, cursor = connect()
+    cursor.execute(top_authors)
+    results = cursor.fetchall()
     db.close()
     print("The most popular article authors of all time are:".title())
     for i in range(len(results)):
@@ -71,10 +67,9 @@ def high_percent_error():
     This function is used to solve problem 3,
     and also print out the outputs in the end
     """
-    db = connect()
-    c = db.cursor()
-    c.execute(error_percent)
-    results = c.fetchall()
+    db, cursor = connect()
+    cursor.execute(error_percent)
+    results = cursor.fetchall()
     db.close()
     print("The day with more than 1% of requests lead to errors are:".title())
     for i in range(len(results)):
